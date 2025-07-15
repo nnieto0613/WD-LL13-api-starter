@@ -52,11 +52,16 @@ function fetchCatFact() {
       
       // Check if we got valid data
       if (data && data.fact) {
-        // Display the cat fact with nice formatting
+        // Display the cat fact with nice formatting and reroll button
         output.innerHTML = '<div class="cat-fact">' +
-                          '<h3>🐱 Cat Fact:</h3>' +
+                          '<h3>Cat Fact:</h3>' +
                           '<p>' + data.fact + '</p>' +
+                          '<button id="reroll-button" class="reroll-btn">🐱</button>' +
                           '</div>';
+        
+        // Add event listener to the reroll button
+        const rerollButton = document.getElementById('reroll-button');
+        rerollButton.addEventListener('click', fetchCatFact);
       } else {
         showError('No cat fact found');
       }
