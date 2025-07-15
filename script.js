@@ -20,11 +20,71 @@ It’s just here to help Copilot support you better.
 Start your code below 👇
 */
 
+// Function to show loading message
+function showLoading() {
+  const output = document.getElementById('output');
+  output.innerHTML = '<p class="loading">Loading cat fact...</p>';
+}
 
+// Function to display error message
+function showError(message) {
+  const output = document.getElementById('output');
+  output.innerHTML = '<p class="error">Error: ' + message + '</p>';
+}
 
+// Function to fetch and display cat fact
+function fetchCatFact() {
+  // Show loading message first
+  showLoading();
+  
+  // Fetch data from the cat facts API (fixed URL with quotes)
+  fetch('https://catfact.ninja/fact')
+    .then(function(response) {
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error('Failed to fetch cat fact');
+      }
+      return response.json();
+    })
+    .then(function(data) {
+      // Get the output container
+      const output = document.getElementById('output');
+      
+      // Check if we got valid data
+      if (data && data.fact) {
+        // Display the cat fact with nice formatting
+        output.innerHTML = '<div class="cat-fact">' +
+                          '<h3>🐱 Cat Fact:</h3>' +
+                          '<p>' + data.fact + '</p>' +
+                          '</div>';
+      } else {
+        showError('No cat fact found');
+      }
+    })
+    .catch(function(error) {
+      // Handle any errors that occur
+      console.log('Error:', error);
+      showError('Could not load cat fact. Please try again.');
+    });
+}
 
-// Use this script to write your fetch logic
-// You'll fetch data from your selected API and display it on the page
+// Function to set up the page when it loads
+function setupPage() {
+  // Get the output container
+  const output = document.getElementById('output');
+  
+  // Add a button to fetch new cat facts
+  output.innerHTML = '<button id="fetch-button" class="fetch-btn">Get Cat Fact! 🐱</button>';
+  
+  // Add event listener to the button
+  const fetchButton = document.getElementById('fetch-button');
+  fetchButton.addEventListener('click', fetchCatFact);
+  
+  // Automatically load the first cat fact
+  fetchCatFact();
+}
 
-// Example placeholder:
-console.log("Team activity starter code loaded.");
+// Wait for the page to load, then set up everything
+document.addEventListener('DOMContentLoaded', setupPage);
+
+console.log("Cat facts API starter code loaded.");
